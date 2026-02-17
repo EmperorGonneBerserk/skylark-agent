@@ -10,15 +10,29 @@ scope = [
     "https://spreadsheets.google.com/feeds",
     "https://www.googleapis.com/auth/drive"
 ]
+# Try Streamlit secrets first (Cloud), fallback to credentials.json (Local)
+try:
+    import streamlit as st
 
-creds = ServiceAccountCredentials.from_json_keyfile_dict(
-    st.secrets["gcp_service_account"],
-    scope
-)
+    if "gcp_service_account" in st.secrets:
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(
+            st.secrets["gcp_service_account"],
+            scope
+        )
+    else:
+        raise Exception("No Streamlit secrets found")
+
+except Exception:
+    creds = ServiceAccountCredentials.from_json_keyfile_name(
+        "credentials.json",
+        scope
+    )
 
 client = gspread.authorize(creds)
-spreadsheet = client.open("Skylark Drones Database")
 
+SPREADSHEET_NAME = "Skylark Drones Database"
+
+spreadsheet = client.open(SPREADSHEET_NAME)
 
 # -------------------------
 # READ FUNCTIONS

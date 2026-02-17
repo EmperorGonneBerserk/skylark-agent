@@ -26,28 +26,34 @@ You help assign pilots, release drones, and answer operational questions.
 
 Interpret user intent and call the correct function.
 """
-
-
 def interpret_command(user_input):
 
     text = user_input.lower()
 
-    # Direct intent handling first (fast and reliable)
-    if "assign" in text or "mission" in text:
+    # ASSIGNMENT INTENT
+    if any(word in text for word in ["assign", "allocate", "send", "deploy"]):
 
-        for m in ["PRJ001", "PRJ002", "PRJ003"]:
-            if m.lower() in text:
-                return assign_mission(m)
+        for mission in ["PRJ001", "PRJ002", "PRJ003"]:
+            if mission.lower() in text:
+                return assign_mission(mission)
 
         return "Please specify mission ID (example: PRJ001)"
 
-    elif "available pilot" in text:
+
+    # SHOW PILOTS INTENT
+    if any(word in text for word in ["pilot", "who is available", "available people", "available pilots"]):
+
         return show_available_pilots()
 
-    elif "available drone" in text:
+
+    # SHOW DRONES INTENT
+    if any(word in text for word in ["drone", "available drones", "which drones"]):
+
         return show_available_drones()
 
-    elif "release" in text:
+
+    # RELEASE INTENT
+    if any(word in text for word in ["release", "free", "unassign"]):
 
         words = user_input.upper().split()
 
@@ -57,13 +63,21 @@ def interpret_command(user_input):
         if pilot and drone:
             return release_resources(pilot, drone)
 
-        return "Specify pilot and drone IDs"
+        return "Specify pilot and drone IDs (example: release P001 D001)"
 
-    # Fallback to OpenAI conversational response
+
+    # FALLBACK TO OPENAI CHAT
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
+            {
+                "role": "system",
+                "content": """
+You are a drone operations assistant.
+You help with drone missions, pilots, and assignments.
+If you don't have system data, ask the user for clarification.
+"""
+            },
             {"role": "user", "content": user_input}
         ]
     )

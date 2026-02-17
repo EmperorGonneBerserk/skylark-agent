@@ -1,5 +1,6 @@
 import streamlit as st
-from agent import handle_query
+# from agent import handle_query
+from ai_agent import interpret_command
 
 st.set_page_config(page_title="Skylark Drone Coordinator", page_icon="🚁")
 
@@ -18,7 +19,8 @@ if user_input:
 
     st.session_state.messages.append(("user", user_input))
 
-    response = handle_query(user_input)
+    # response = handle_query(user_input)
+    response = interpret_command(user_input)
 
     st.session_state.messages.append(("assistant", response))
 

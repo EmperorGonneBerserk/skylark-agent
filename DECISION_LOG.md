@@ -90,6 +90,126 @@ If no suitable resources exist, the system safely reports unavailability instead
 
 ---
 
+## Conversational AI Design Decision
+
+Initially, the system supported fixed command inputs such as:
+
+- assign PRJ001
+- show available pilots
+
+To improve usability and meet the conversational interface requirement more effectively, OpenAI's GPT model was integrated.
+
+A hybrid architecture was chosen:
+
+- Deterministic intent routing for critical operations
+- OpenAI fallback for conversational responses
+
+This ensures operational safety while allowing natural language interaction.
+
+Example supported inputs:
+
+- "Assign someone to PRJ001"
+- "Who is available right now?"
+- "Release P001 and D001"
+
+---
+
+## Intent Routing vs Fully Autonomous LLM
+
+A fully autonomous LLM-controlled system was considered but rejected due to safety risks.
+
+Instead, intent routing was implemented:
+
+LLM → Intent detection → Controlled backend function execution
+
+This prevents:
+
+- Invalid assignments
+- Hallucinated operations
+- Unsafe system actions
+
+This design ensures reliability and predictability.
+
+---
+
+## Resource Lifecycle Management Decision
+
+Initially, once pilots and drones were assigned, they remained permanently assigned.
+
+This caused system resource exhaustion.
+
+To solve this, explicit resource release functionality was implemented.
+
+Release command:
+
+release P001 D001
+
+
+This allows continuous system operation and realistic lifecycle management.
+
+This mirrors real-world operations where resources are reused after mission completion.
+
+---
+
+## Separation of Concerns Architecture
+
+The system was structured into layers:
+
+- UI Layer (Streamlit)
+- Conversational AI Layer
+- Coordination Logic Layer
+- Assignment Engines
+- Conflict Detection Layer
+- Database Layer
+
+This modular architecture improves:
+
+- Maintainability
+- Testability
+- Scalability
+
+---
+
+## Unit Testing Strategy
+
+Unit tests were created for each major subsystem:
+
+- Google Sheets connectivity
+- Pilot assignment logic
+- Drone assignment logic
+- Conflict detection
+- Full coordinator flow
+
+This ensured correctness of each component independently before integration.
+
+---
+
+## Deployment and Secrets Management
+
+Sensitive credentials were managed using:
+
+- Local: `.env`
+- Production: Streamlit Secrets
+
+This prevents credential exposure while enabling secure deployment.
+
+---
+
+## Final System Capabilities
+
+The system now supports:
+
+- Natural language mission assignment
+- Intelligent pilot and drone selection
+- Conflict detection and prevention
+- Resource lifecycle management
+- Real-time Google Sheets synchronization
+- Hosted conversational interface
+
+This fulfills all assignment requirements and provides production-level functionality.
+
+---
+
 ## Technology Choices
 
 ### Streamlit

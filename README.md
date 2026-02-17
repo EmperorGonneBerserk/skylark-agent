@@ -113,16 +113,73 @@ Writes:
 This ensures real-time synchronization.
 
 ---
+## Conversational AI Integration (OpenAI)
+
+The system now supports natural language interaction using OpenAI's GPT model. Instead of requiring fixed commands, users can interact conversationally.
+
+Examples:
+
+- "Assign someone to PRJ001"
+- "Who is available right now?"
+- "Do we have drones that can operate in rain?"
+- "Release pilot P001 and drone D001"
+
+### How it works
+
+The conversational layer is implemented in `ai_agent.py`. It performs:
+
+1. Intent detection from user input
+2. Routing to the correct backend function
+3. Executing assignment, release, or query logic
+4. Returning structured results to the user
+
+This enables a flexible and intuitive coordination interface.
+
+---
+
+## Resource Lifecycle Management
+
+To ensure continuous system usability, resource release functionality was implemented.
+
+Users can release assigned resources manually:
+
+Example:
+
+release P001 D001
+
+
+This updates Google Sheets and makes the pilot and drone available again.
+
+This prevents permanent assignment locking and ensures the system remains operational indefinitely.
+
+---
+
+## Intent Routing Architecture
+
+The AI agent uses a hybrid architecture combining:
+
+- Deterministic intent routing (for assignment, release, availability)
+- OpenAI conversational fallback (for general questions)
+
+This ensures:
+
+- Reliable execution of critical operations
+- Natural conversational flexibility
+- Prevention of hallucinated assignments
+
+---
 
 ## Architecture
 
-
-
-Streamlit UI
+User
 ↓
-Agent Layer (agent.py)
+Streamlit UI (app.py)
 ↓
-Assignment Engine (assignment.py, drone_assignment.py)
+Conversational AI Layer (ai_agent.py)
+↓
+Coordinator Logic (agent.py)
+↓
+Assignment Engines (assignment.py, drone_assignment.py)
 ↓
 Conflict Detection (conflict_detection.py)
 ↓
@@ -130,35 +187,50 @@ Database Layer (sheets.py)
 ↓
 Google Sheets
 
+---
+
+## AI Agent File Overview
+
+| File | Role |
+|----|----|
+| app.py | Streamlit user interface |
+| ai_agent.py | Conversational AI interpreter and intent router |
+| agent.py | Core coordinator logic |
+| assignment.py | Pilot selection engine |
+| drone_assignment.py | Drone selection engine |
+| conflict_detection.py | Assignment safety validation |
+| sheets.py | Google Sheets integration |
+| test_*.py | Unit tests |
 
 ---
 
-## Project Structure
+## Security
 
+Sensitive credentials are stored securely using:
 
+- `.env` file (local development)
+- Streamlit Secrets Manager (production deployment)
 
-skylark-agent/
-│
-├── app.py
-├── agent.py
-├── sheets.py
-├── assignment.py
-├── drone_assignment.py
-├── conflict_detection.py
-│
-├── test_agent.py
-├── test_assignment.py
-├── test_conflicts.py
-├── test_drone_assignment.py
-├── test_sheets.py
-├── test_sync.py
-│
-├── requirements.txt
-├── README.md
-└── .gitignore
-
+Credentials are never committed to version control.
 
 ---
+
+## Example Workflow
+
+Example interaction:
+
+User: Assign someone to PRJ001
+
+System:
+Mission Assigned Successfully
+Pilot: Arjun
+Drone: D001
+Location: Bangalore
+
+User: Release P001 D001
+
+System:
+Pilot P001 and Drone D001 released successfully.
 
 ## Installation (Local Setup)
 
@@ -173,6 +245,7 @@ cd skylark-agent
 
 Create virtual environment:
 
+Create a .env file and then configure the openai api key
 
 
 python -m venv venv
@@ -213,6 +286,7 @@ Secrets configured securely using Streamlit Secrets Manager.
 - Google Sheets API
 - gspread
 - OAuth2 Service Accounts
+- OPENAI
 
 ---
 

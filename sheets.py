@@ -1,4 +1,5 @@
 import gspread
+import streamlit as st
 import pandas as pd
 import os
 from oauth2client.service_account import ServiceAccountCredentials
@@ -10,16 +11,13 @@ scope = [
     "https://www.googleapis.com/auth/drive"
 ]
 
-creds = ServiceAccountCredentials.from_json_keyfile_name(
-    "credentials.json",
+creds = ServiceAccountCredentials.from_json_keyfile_dict(
+    st.secrets["gcp_service_account"],
     scope
 )
 
 client = gspread.authorize(creds)
-
-SPREADSHEET_NAME = "Skylark Drones Database"
-
-spreadsheet = client.open(SPREADSHEET_NAME)
+spreadsheet = client.open("Skylark Drones Database")
 
 
 # -------------------------

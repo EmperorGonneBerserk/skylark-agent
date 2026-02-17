@@ -93,42 +93,50 @@ def release_resources(pilot_id, drone_id):
 
         return f"Pilot {pilot_id} and Drone {drone_id} released successfully."
 
-
 def handle_query(user_input):
 
-    user_input = user_input.lower()
+    user_input_clean = user_input.strip()
+    user_input_lower = user_input_clean.lower()
+    parts = user_input_clean.split()
 
-    if "assign" in user_input:
+    try:
 
-        project_id = user_input.upper().split()[-1]
+        if user_input_lower.startswith("assign"):
 
-        return assign_mission(project_id)
+            project_id = parts[1].upper()
+            return assign_mission(project_id)
 
-    elif "available pilots" in user_input:
+        elif user_input_lower.startswith("urgent"):
 
-        return show_available_pilots()
+            project_id = parts[1].upper()
+            return urgent_reassignment(project_id)
 
-    elif "available drones" in user_input:
+        elif user_input_lower.startswith("release"):
 
-        return show_available_drones()
+            pilot_id = parts[1].upper()
+            drone_id = parts[2].upper()
 
-    elif "urgent" in user_input:
+            return release_resources(pilot_id, drone_id)
 
-        project_id = user_input.upper().split()[-1]
+        elif "available pilots" in user_input_lower:
 
-        return urgent_reassignment(project_id)
-    
-    elif "release" in user_input:
+            return show_available_pilots()
 
-        parts = user_input.upper().split()
+        elif "available drones" in user_input_lower:
 
-        pilot_id = parts[1]
-        drone_id = parts[2]
+            return show_available_drones()
 
-        return release_resources(pilot_id, drone_id)
+        else:
 
-    else:
+            return """Available commands:
+            
+assign PRJ001
+urgent PRJ002
+release P001 D001
+show available pilots
+show available drones
+"""
 
-        return "I can help assign pilots, show availability, and manage missions."
-    
+    except Exception as e:
 
+        return f"Error processing command: {str(e)}"

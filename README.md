@@ -10,7 +10,7 @@ This system replaces manual coordination workflows with an intelligent agent cap
 
 ## Hosted Prototype
 
-Live App: https://YOUR-STREAMLIT-LINK.streamlit.app
+Live App: https://skylark-agent-letbnr7dnkksuor5kmeynz.streamlit.app/
 
 GitHub Repository: https://github.com/EmperorGonneBerserk/skylark-agent
 

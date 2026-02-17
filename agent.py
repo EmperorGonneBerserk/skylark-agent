@@ -86,6 +86,13 @@ def urgent_reassignment(project_id):
 
     return assign_mission(project_id)
 
+def release_resources(pilot_id, drone_id):
+
+        update_pilot_status(pilot_id, "Available")
+        update_drone_status(drone_id, "Available")
+
+        return f"Pilot {pilot_id} and Drone {drone_id} released successfully."
+
 
 def handle_query(user_input):
 
@@ -110,7 +117,18 @@ def handle_query(user_input):
         project_id = user_input.upper().split()[-1]
 
         return urgent_reassignment(project_id)
+    
+    elif "release" in user_input:
+
+        parts = user_input.upper().split()
+
+        pilot_id = parts[1]
+        drone_id = parts[2]
+
+        return release_resources(pilot_id, drone_id)
 
     else:
 
         return "I can help assign pilots, show availability, and manage missions."
+    
+

@@ -87,3 +87,145 @@ Users interact using simple commands:
 
 Example commands:
 
+show available pilots
+show available drones
+assign PRJ001
+urgent PRJ002
+
+
+---
+
+### 7. Google Sheets Integration (2-Way Sync)
+
+The system uses Google Sheets as the database.
+
+Reads:
+
+- Pilot roster
+- Drone fleet
+- Mission list
+
+Writes:
+
+- Pilot status updates
+- Drone assignment updates
+
+This ensures real-time synchronization.
+
+---
+
+## Architecture
+
+
+
+Streamlit UI
+↓
+Agent Layer (agent.py)
+↓
+Assignment Engine (assignment.py, drone_assignment.py)
+↓
+Conflict Detection (conflict_detection.py)
+↓
+Database Layer (sheets.py)
+↓
+Google Sheets
+
+
+---
+
+## Project Structure
+
+
+
+skylark-agent/
+│
+├── app.py
+├── agent.py
+├── sheets.py
+├── assignment.py
+├── drone_assignment.py
+├── conflict_detection.py
+│
+├── test_agent.py
+├── test_assignment.py
+├── test_conflicts.py
+├── test_drone_assignment.py
+├── test_sheets.py
+├── test_sync.py
+│
+├── requirements.txt
+├── README.md
+└── .gitignore
+
+
+---
+
+## Installation (Local Setup)
+
+Clone repo:
+
+
+
+git clone https://github.com/EmperorGonneBerserk/skylark-agent.git
+
+cd skylark-agent
+
+
+Create virtual environment:
+
+
+
+python -m venv venv
+venv\Scripts\activate
+
+
+Install dependencies:
+
+
+
+pip install -r requirements.txt
+
+
+Add credentials.json file.
+
+Run app:
+
+
+
+streamlit run app.py
+
+
+---
+
+## Deployment
+
+Hosted on Streamlit Cloud.
+
+Secrets configured securely using Streamlit Secrets Manager.
+
+---
+
+## Technologies Used
+
+- Python
+- Streamlit
+- Pandas
+- Google Sheets API
+- gspread
+- OAuth2 Service Accounts
+
+---
+
+## Key Capabilities Demonstrated
+
+- Intelligent resource allocation
+- Constraint-aware decision making
+- Conflict detection and prevention
+- Real-time database synchronization
+- Conversational AI coordination interface
+
+---
+
+## Author
+
+Shushruth Gowda
